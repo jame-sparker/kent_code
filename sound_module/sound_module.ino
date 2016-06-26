@@ -1,21 +1,27 @@
-const int KNOCK_PIN = 0;
-const int MIN_KNOCK = 10;
-const char KNOCK_MESSAGE[] = "KNOCK"; 
-const int DELAY_TIME = 300; //delay for knock 
+const int RESISTER_PIN = 0;
+const char ON_MESSAGE[] = "ON"; 
+const char OFF_MESSAGE[] = "OFF";
+const int THRESHOLD = 2;
+const int ERROR = 10;
 
-int knock = 0;
+int turn = 0;
+boolean on = false;
 
 void setup() {
   Serial.begin(9600); 
 } 
 
 void loop() { 
+  turn = analogRead(RESISTER_PIN);
+  
+  if(!on && turn > THRESHOLD + ERROR ){
+    Serial.println(ON_MESSAGE); 
+    on = true;
+  }
 
-  knock = analogRead(KNOCK_PIN);
-    
-  if(knock > MIN_KNOCK){
-    Serial.print(KNOCK_MESSAGE); 
-    delay(DELAY_TIME);
+  if(on && turn <= THRESHOLD){
+        Serial.println(OFF_MESSAGE); 
+        on = false;
   }
   
 }
